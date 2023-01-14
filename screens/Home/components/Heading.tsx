@@ -8,8 +8,8 @@ import { View as ThemedView } from '../../../components/Themed';
 import { colors } from '../../../constants/Colors';
 import useColorScheme from '../../../hooks/useColorScheme';
 
-import BarCodeImg from '../assets/svg/barcode.svg';
-import BarCodeDarkImg from '../assets/svg/barcode_dark.svg';
+import BarCodeImg from '../../../assets/svg/barcode.svg';
+import BarCodeDarkImg from '../../../assets/svg/barcode_dark.svg';
 
 interface Props {
   ticketsCount: number;

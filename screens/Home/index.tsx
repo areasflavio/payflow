@@ -6,13 +6,13 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { Header } from '../../components/Header';
 import { StyledText } from '../../components/StyledText';
 import { View as ThemedView } from '../../components/Themed';
+import { Ticket } from '../../components/Ticket';
 import { colors } from '../../constants/Colors';
 import { mockTickets, Ticket as TicketDTO } from '../../dtos/Ticket';
 import useColorScheme from '../../hooks/useColorScheme';
 
 import { BottomSheet } from './components/BottomSheet';
 import { Heading } from './components/Heading';
-import { Ticket } from './components/Ticket';
 
 export function Home() {
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);

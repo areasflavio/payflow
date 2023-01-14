@@ -120,7 +120,12 @@ export function BottomSheet({
             />
           }
           buttonStyle={[styles.footer]}
-          titleStyle={[styles.buttonTitle]}
+          titleStyle={[
+            styles.buttonTitle,
+            {
+              color: colors[colorScheme].actions.delete,
+            },
+          ]}
         />
       </ThemedView>
     </RNEBottomSheet>

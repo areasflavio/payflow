@@ -2,17 +2,17 @@ import React from 'react';
 import { StyleSheet, TouchableNativeFeedback, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 
-import { StyledText } from '../../../components/StyledText';
-import { View as ThemedView } from '../../../components/Themed';
-import { colors } from '../../../constants/Colors';
-import { Ticket } from '../../../dtos/Ticket';
-import useColorScheme from '../../../hooks/useColorScheme';
-import { currency, dateDayMonthYear } from '../../../utils/format';
+import { colors } from '../constants/Colors';
+import { Ticket as TicketDTO } from '../dtos/Ticket';
+import useColorScheme from '../hooks/useColorScheme';
+import { currency, dateDayMonthYear } from '../utils/format';
+import { StyledText } from './StyledText';
+import { View as ThemedView } from './Themed';
 
 interface Props {
-  ticket: Ticket;
-  onBottomSheetVisible: (value: boolean) => void;
-  onSelectedTicket: (ticket: Ticket) => void;
+  ticket: TicketDTO;
+  onBottomSheetVisible?: (value: boolean) => void;
+  onSelectedTicket?: (ticket: TicketDTO) => void;
 }
 
 export function Ticket({
@@ -25,8 +25,8 @@ export function Ticket({
   return (
     <TouchableNativeFeedback
       onLongPress={() => {
-        onBottomSheetVisible(true);
-        onSelectedTicket(ticket);
+        onBottomSheetVisible && onBottomSheetVisible(true);
+        onSelectedTicket && onSelectedTicket(ticket);
       }}
       background={TouchableNativeFeedback.Ripple(
         colors[colorScheme].shapes.boxes,

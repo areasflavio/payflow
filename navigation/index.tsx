@@ -40,12 +40,12 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Root"
-        component={BottomTabNavigator}
-        options={{ headerShown: false }}
-      />
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen name="Root" component={BottomTabNavigator} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Scanner" component={Scanner} />
         <Stack.Screen name="NewTicket" component={NewTicket} />
@@ -98,7 +98,7 @@ function BottomTabNavigator() {
           title: 'New Ticket',
           tabBarIcon: ({ color, focused }) => (
             <Button
-              onPress={() => navigate('Scanner')}
+              onPress={() => navigate('NewTicket')}
               color={colors[colorScheme].brand.primary}
               radius={5}
               size="lg"

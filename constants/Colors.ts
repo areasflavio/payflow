@@ -15,7 +15,7 @@ export const colors = {
     },
     shapes: {
       stroke: '#e3e3e5',
-      boxes: '#fafafc',
+      boxes: '#f0f0f0',
     },
     gradients: {
       header: {
@@ -40,7 +40,7 @@ export const colors = {
     },
     shapes: {
       stroke: '#6d6d6d',
-      boxes: '#fafafc',
+      boxes: '#2f2f2f',
     },
     gradients: {
       header: {

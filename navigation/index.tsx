@@ -84,9 +84,8 @@ function BottomTabNavigator() {
               'rgba(255, 255, 255, 1)',
               'rgba(255, 255, 255, 1)',
               'rgba(255, 255, 255, 1)',
-              'rgba(255, 255, 255, .9)',
+              'rgba(255, 255, 255, .8)',
               'rgba(255, 255, 255, 0.1)',
-              'rgba(255, 255, 255, 0)',
               'rgba(255, 255, 255, 0)',
             ]}
             start={{ x: 0.5, y: 0.5 }}
@@ -97,7 +96,7 @@ function BottomTabNavigator() {
               alignItems: 'center',
               justifyContent: 'center',
             }}
-          ></LinearGradient>
+          />
         ),
       }}
     >

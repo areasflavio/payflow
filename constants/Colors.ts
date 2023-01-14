@@ -17,6 +17,12 @@ export const colors = {
       stroke: '#e3e3e5',
       boxes: '#fafafc',
     },
+    gradients: {
+      header: {
+        start: '#ff941a',
+        end: '#ffcc80',
+      },
+    },
   },
   dark: {
     brand: {
@@ -35,6 +41,12 @@ export const colors = {
     shapes: {
       stroke: '#e3e3e5',
       boxes: '#fafafc',
+    },
+    gradients: {
+      header: {
+        start: '#ff941a',
+        end: '#ffcc80',
+      },
     },
   },
 };

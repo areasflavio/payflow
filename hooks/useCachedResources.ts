@@ -1,4 +1,3 @@
-import { Feather } from '@expo/vector-icons';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
@@ -14,9 +13,9 @@ export default function useCachedResources() {
 
         // Load fonts
         await Font.loadAsync({
-          ...Feather.font,
           'Inter-Regular': require('../assets/fonts/Inter-Regular.ttf'),
           'Inter-SemiBold': require('../assets/fonts/Inter-SemiBold.ttf'),
+          'Lexend-Regular': require('../assets/fonts/Lexend-Regular.ttf'),
           'Lexend-SemiBold': require('../assets/fonts/Lexend-SemiBold.ttf'),
         });
       } catch (e) {

@@ -15,6 +15,7 @@ export default function useCachedResources() {
         await Font.loadAsync({
           'Inter-Regular': require('../assets/fonts/Inter-Regular.ttf'),
           'Inter-SemiBold': require('../assets/fonts/Inter-SemiBold.ttf'),
+          'Inter-Bold': require('../assets/fonts/Inter-Bold.ttf'),
           'Lexend-Regular': require('../assets/fonts/Lexend-Regular.ttf'),
           'Lexend-SemiBold': require('../assets/fonts/Lexend-SemiBold.ttf'),
         });

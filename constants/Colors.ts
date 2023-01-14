@@ -27,19 +27,19 @@ export const colors = {
   dark: {
     brand: {
       primary: '#ff941a',
-      secondary: '#585666',
-      background: '#ffffff',
+      secondary: '#a4a4a4',
+      background: '#121212',
     },
     texts: {
-      heading: '#585666',
-      body: '#706e7a',
+      heading: '#a4a4a4',
+      body: '#ededed',
       inputs: '#b1b0bb',
     },
     actions: {
       delete: '#e83f5b',
     },
     shapes: {
-      stroke: '#e3e3e5',
+      stroke: '#6d6d6d',
       boxes: '#fafafc',
     },
     gradients: {

@@ -7,7 +7,6 @@ import {
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Button } from '@rneui/themed';
-import { LinearGradient } from 'expo-linear-gradient';
 import { House, List, Plus } from 'phosphor-react-native';
 import * as React from 'react';
 import { ColorSchemeName } from 'react-native';
@@ -72,32 +71,10 @@ function BottomTabNavigator() {
         tabBarStyle: {
           height: getBottomSpace() + 64,
           paddingHorizontal: 64,
+          paddingBottom: 24,
           borderTopWidth: 0,
           borderTopColor: 'transparent',
         },
-        tabBarBackground: () => (
-          <LinearGradient
-            colors={[
-              'rgba(255, 255, 255, 1)',
-              'rgba(255, 255, 255, 1)',
-              'rgba(255, 255, 255, 1)',
-              'rgba(255, 255, 255, 1)',
-              'rgba(255, 255, 255, 1)',
-              'rgba(255, 255, 255, 1)',
-              'rgba(255, 255, 255, .8)',
-              'rgba(255, 255, 255, 0.1)',
-              'rgba(255, 255, 255, 0)',
-            ]}
-            start={{ x: 0.5, y: 0.5 }}
-            end={{ x: 0.5, y: 0 }}
-            style={{
-              height: 128,
-              width: '100%',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          />
-        ),
       }}
     >
       <BottomTab.Screen

@@ -4,6 +4,7 @@ type Props = TextProps & {
   fontFamily?:
     | 'Inter-Regular'
     | 'Inter-SemiBold'
+    | 'Inter-Bold'
     | 'Lexend-Regular'
     | 'Lexend-SemiBold';
 };

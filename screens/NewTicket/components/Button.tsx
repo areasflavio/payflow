@@ -35,6 +35,9 @@ export function Button({ brand, onPress, ...rest }: Props) {
           borderColor: colors[colorScheme].shapes.stroke,
         },
       ]}
+      loadingProps={{
+        color: colors[colorScheme].brand.primary,
+      }}
       {...rest}
     />
   );

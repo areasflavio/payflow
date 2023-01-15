@@ -1,7 +1,7 @@
 import { BottomSheet as RNEBottomSheet, Button } from '@rneui/themed';
 import { Trash } from 'phosphor-react-native';
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useState } from 'react';
+import { Alert, StyleSheet, View } from 'react-native';
 import { getBottomSpace } from 'react-native-iphone-x-helper';
 import { RFValue } from 'react-native-responsive-fontsize';
 
@@ -10,6 +10,7 @@ import { View as ThemedView } from '../../../components/Themed';
 import { colors } from '../../../constants/Colors';
 import { Ticket } from '../../../dtos/Ticket';
 import useColorScheme from '../../../hooks/useColorScheme';
+import { fetcher } from '../../../service/fetcher';
 import { currency } from '../../../utils/format';
 
 interface Props {
@@ -24,6 +25,53 @@ export function BottomSheet({
   selectedTicket,
 }: Props) {
   const colorScheme = useColorScheme();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const setTicketPayed = async () => {
+    try {
+      setIsLoading(true);
+
+      await fetcher(`/tickets/${selectedTicket.id}`, {
+        method: 'PATCH',
+        data: {
+          payed: true,
+        },
+      });
+
+      Alert.alert('Sucesso', 'Boleto pago com sucesso!');
+
+      onBackdropPress(false);
+    } catch (err) {
+      Alert.alert(
+        'Erro',
+        'Não foi possível editar seu boleto. Tente novamente.'
+      );
+    } finally {
+      setIsLoading(true);
+    }
+  };
+
+  const deleteTicket = async () => {
+    try {
+      setIsDeleting(true);
+
+      await fetcher(`/tickets/${selectedTicket.id}`, {
+        method: 'DELETE',
+      });
+
+      Alert.alert('Sucesso', 'Boleto deletado com sucesso!');
+
+      onBackdropPress(false);
+    } catch (err) {
+      Alert.alert(
+        'Erro',
+        'Não foi possível deletar seu boleto. Tente novamente.'
+      );
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   return (
     <RNEBottomSheet
@@ -94,6 +142,8 @@ export function BottomSheet({
             title="Sim"
             color={colors[colorScheme].brand.primary}
             size="lg"
+            onPress={setTicketPayed}
+            loading={isLoading}
             titleStyle={[
               styles.buttonTitle,
               {
@@ -112,6 +162,8 @@ export function BottomSheet({
         <Button
           title="Deletar boleto"
           color={colors[colorScheme].brand.background}
+          onPress={deleteTicket}
+          loading={isDeleting}
           icon={
             <Trash
               size={18}

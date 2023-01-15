@@ -22,7 +22,7 @@
       "id": "2c4eb6bc-9fc1-5882-933e-b65479dc1615",
       "title": "Mercado",
       "value": 621.95,
-      "payed": true
+      "payed": false
     },
     {
       "code": "39921196",
@@ -30,7 +30,7 @@
       "id": "eabbed4e-d204-5fcd-80bb-8540de61aea8",
       "title": "Roupas",
       "value": 247.41,
-      "payed": false
+      "payed": true
     },
     {
       "code": "92726268",

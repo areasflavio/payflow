@@ -11,6 +11,7 @@ import {
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import {
+  Alert,
   Keyboard,
   ScrollView,
   StyleSheet,
@@ -19,12 +20,15 @@ import {
 } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { RFValue } from 'react-native-responsive-fontsize';
+import uuid from 'react-native-uuid';
 import * as yup from 'yup';
 
 import { StyledText } from '../../components/StyledText';
 import { View as ThemedView } from '../../components/Themed';
 import { colors } from '../../constants/Colors';
+import { Ticket } from '../../dtos/Ticket';
 import useColorScheme from '../../hooks/useColorScheme';
+import { fetcher } from '../../service/fetcher';
 import { dateDayMonthYear } from '../../utils/format';
 import { Button } from './components/Button';
 import { Input } from './components/Input';
@@ -52,15 +56,16 @@ type FormData = {
   title: string;
   due: string;
   value: number;
-  code: number;
+  code: string;
 };
 
 export function NewTicket() {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [dueDate, setDueDate] = useState<Date>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const colorScheme = useColorScheme();
-  const { goBack } = useNavigation();
+  const { goBack, navigate } = useNavigation();
 
   const {
     register,
@@ -74,13 +79,33 @@ export function NewTicket() {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit: SubmitHandler<FormData> = (data) => {
-    const formData = {
-      ...data,
-      due: dueDate,
-    };
-    console.log(formData);
-    Keyboard.dismiss();
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
+    try {
+      setIsLoading(true);
+      const formData: Ticket = {
+        ...data,
+        id: String(uuid.v4()),
+        due: dueDate!,
+        payed: false,
+      };
+
+      await fetcher('/tickets', {
+        method: 'POST',
+        data: formData,
+      });
+
+      Alert.alert('Sucesso', 'Boleto cadastrado com sucesso!');
+
+      navigate('Root');
+    } catch (err) {
+      Alert.alert(
+        'Erro',
+        'Não foi possível cadastrar seu boleto. Tente novamente.'
+      );
+    } finally {
+      Keyboard.dismiss();
+      setIsLoading(false);
+    }
   };
 
   const showDatePicker = () => {
@@ -180,6 +205,7 @@ export function NewTicket() {
             title="Cadastrar"
             brand="primary"
             onPress={handleSubmit(onSubmit)}
+            loading={isLoading}
           />
         </ThemedView>
 

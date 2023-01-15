@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigation } from '@react-navigation/native';
-import { Button, Header } from '@rneui/themed';
+import { Header } from '@rneui/themed';
 import {
   ArrowLeft,
   Barcode,
@@ -11,14 +11,12 @@ import {
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import {
-  Dimensions,
   Keyboard,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from 'react-native';
-import { getBottomSpace } from 'react-native-iphone-x-helper';
 import { RFValue } from 'react-native-responsive-fontsize';
 import * as yup from 'yup';
 
@@ -26,6 +24,7 @@ import { StyledText } from '../../components/StyledText';
 import { View as ThemedView } from '../../components/Themed';
 import { colors } from '../../constants/Colors';
 import useColorScheme from '../../hooks/useColorScheme';
+import { Button } from './components/Button';
 import { Input } from './components/Input';
 
 const defaultValues = {
@@ -46,7 +45,6 @@ const schema = yup
     code: yup
       .number()
       .positive('O código do boleto deve ser um valor positivo')
-      .integer('O código do boleto deve ser um valor inteiro')
       .required('O código do boleto é obrigatório'),
   })
   .required();
@@ -64,7 +62,6 @@ export function NewTicket() {
 
   const {
     register,
-    setValue,
     handleSubmit,
     control,
     reset,
@@ -93,11 +90,7 @@ export function NewTicket() {
             barStyle:
               colorScheme === 'light' ? 'dark-content' : 'light-content',
           }}
-          containerStyle={{
-            borderBottomWidth: 0,
-            marginHorizontal: 24,
-            marginVertical: 18,
-          }}
+          containerStyle={styles.header}
         />
 
         <StyledText
@@ -156,41 +149,14 @@ export function NewTicket() {
         <ThemedView style={styles.buttonContainer}>
           <Button
             title="Cancelar"
-            type="outline"
-            onPress={() => {
-              reset(defaultValues);
-              Keyboard.dismiss();
-            }}
-            titleStyle={[
-              styles.buttonTitle,
-              {
-                color: colors[colorScheme].texts.body,
-              },
-            ]}
-            buttonStyle={[
-              styles.button,
-              {
-                borderColor: colors[colorScheme].shapes.stroke,
-              },
-            ]}
+            brand="secondary"
+            onPress={() => reset(defaultValues)}
           />
 
           <Button
             title="Cadastrar"
-            type="outline"
+            brand="primary"
             onPress={handleSubmit(onSubmit)}
-            titleStyle={[
-              styles.buttonTitle,
-              {
-                color: colors[colorScheme].brand.primary,
-              },
-            ]}
-            buttonStyle={[
-              styles.button,
-              {
-                borderColor: colors[colorScheme].shapes.stroke,
-              },
-            ]}
           />
         </ThemedView>
       </ThemedView>
@@ -203,6 +169,11 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 24,
   },
+  header: {
+    borderBottomWidth: 0,
+    marginHorizontal: 24,
+    marginVertical: 18,
+  },
   title: {
     textAlign: 'center',
     fontSize: RFValue(20),
@@ -211,16 +182,5 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 'auto',
     flexDirection: 'row',
-  },
-  button: {
-    borderWidth: 1,
-    width: Dimensions.get('window').width / 2,
-    padding: 16,
-    paddingBottom: getBottomSpace() + 16,
-  },
-  buttonTitle: {
-    fontFamily: 'Inter-Regular',
-    fontSize: RFValue(15),
-    lineHeight: RFValue(18),
   },
 });

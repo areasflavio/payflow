@@ -1,7 +1,7 @@
 import { Input as RNEInput, InputProps } from '@rneui/themed';
 import React from 'react';
 import { Controller } from 'react-hook-form';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 
 import { colors } from '../../../constants/Colors';
@@ -12,40 +12,42 @@ interface Props extends InputProps {
   name: string;
 }
 
-export function Input({ control, name, ...rest }: Props) {
+export function Input({ control, name, errorMessage, ...rest }: Props) {
   const colorScheme = useColorScheme();
 
   return (
-    <View>
-      <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <RNEInput
-            onBlur={onBlur}
-            onChangeText={(value) => onChange(value)}
-            value={value}
-            placeholderTextColor={colors[colorScheme].texts.inputs}
-            cursorColor={colors[colorScheme].brand.primary}
-            style={[
-              styles.input,
-              {
-                color: colors[colorScheme].texts.body,
-                borderColor: colors[colorScheme].shapes.stroke,
-              },
-            ]}
-            leftIconContainerStyle={[
-              styles.icon,
-              {
-                borderColor: colors[colorScheme].shapes.stroke,
-              },
-            ]}
-            {...rest}
-          />
-        )}
-        name={name}
-        rules={{ required: true }}
-      />
-    </View>
+    <Controller
+      control={control}
+      render={({ field: { onChange, onBlur, value } }) => (
+        <RNEInput
+          onBlur={onBlur}
+          onChangeText={(value) => onChange(value)}
+          value={value}
+          placeholderTextColor={colors[colorScheme].texts.inputs}
+          cursorColor={colors[colorScheme].brand.primary}
+          style={[
+            styles.input,
+            {
+              color: colors[colorScheme].texts.body,
+              borderColor: colors[colorScheme].shapes.stroke,
+            },
+          ]}
+          leftIconContainerStyle={[
+            styles.icon,
+            {
+              borderColor: colors[colorScheme].shapes.stroke,
+            },
+          ]}
+          errorStyle={{ color: colors[colorScheme].actions.delete }}
+          errorMessage={errorMessage}
+          autoCapitalize="none"
+          autoComplete="off"
+          autoCorrect={false}
+          {...rest}
+        />
+      )}
+      name={name}
+    />
   );
 }
 const styles = StyleSheet.create({

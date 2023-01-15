@@ -1,55 +1,99 @@
+import { useFocusEffect } from '@react-navigation/native';
 import { Divider } from '@rneui/themed';
-import React from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { Alert, FlatList, StyleSheet, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 
 import { Header } from '../components/Header';
+import { Load } from '../components/Load';
 import { StyledText } from '../components/StyledText';
 import { View as ThemedView } from '../components/Themed';
 import { Ticket } from '../components/Ticket';
 import { colors } from '../constants/Colors';
-import { mockTickets } from '../dtos/Ticket';
+import { Ticket as TicketDTO } from '../dtos/Ticket';
 import useColorScheme from '../hooks/useColorScheme';
+import { fetcher } from '../service/fetcher';
+import { orderByDate } from '../utils/order';
 
 export function Extracts() {
-  const data = mockTickets;
+  const [data, setData] = useState<TicketDTO[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   const colorScheme = useColorScheme();
+
+  const fetchData = async () => {
+    try {
+      const data = await fetcher<TicketDTO[]>('/tickets', {
+        method: 'GET',
+      });
+
+      const formattedData = data.map((item) => ({
+        ...item,
+        due: new Date(item.due),
+      }));
+
+      const filteredFormattedData = formattedData.filter(
+        (item) => item.payed === true
+      );
+
+      setData(filteredFormattedData.sort(orderByDate));
+    } catch (err) {
+      Alert.alert(
+        'Erro',
+        'Não foi possível carregar seus extratos. Tente novamente.'
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [])
+  );
 
   return (
     <View style={{ flex: 1 }}>
       <Header size="md" />
 
-      <ThemedView style={styles.container}>
-        <View style={styles.heading}>
-          <StyledText
-            color={colors[colorScheme].texts.heading}
-            fontFamily="Lexend-SemiBold"
-            style={styles.title}
-          >
-            Meus extratos
-          </StyledText>
-          <StyledText
-            color={colors[colorScheme].texts.body}
-            fontFamily="Inter-Regular"
-            style={styles.titleSpan}
-          >
-            {`${data.length} pagos`}
-          </StyledText>
-        </View>
+      {isLoading ? (
+        <Load />
+      ) : (
+        <ThemedView style={styles.container}>
+          <View style={styles.heading}>
+            <StyledText
+              color={colors[colorScheme].texts.heading}
+              fontFamily="Lexend-SemiBold"
+              style={styles.title}
+            >
+              Meus extratos
+            </StyledText>
+            <StyledText
+              color={colors[colorScheme].texts.body}
+              fontFamily="Inter-Regular"
+              style={styles.titleSpan}
+            >
+              {`${data.length} pagos`}
+            </StyledText>
+          </View>
 
-        <Divider
-          width={1}
-          color={colors[colorScheme].shapes.stroke}
-          style={styles.divider}
-        />
+          <Divider
+            width={1}
+            color={colors[colorScheme].shapes.stroke}
+            style={styles.divider}
+          />
 
-        <FlatList
-          data={data}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <Ticket ticket={item} />}
-          showsVerticalScrollIndicator={false}
-        />
-      </ThemedView>
+          <FlatList
+            data={data}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => <Ticket ticket={item} />}
+            showsVerticalScrollIndicator={false}
+            refreshing={isLoading}
+            onRefresh={fetchData}
+          />
+        </ThemedView>
+      )}
     </View>
   );
 }

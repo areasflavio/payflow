@@ -1,3 +1,4 @@
+import { isBefore } from 'date-fns';
 import React from 'react';
 import { StyleSheet, TouchableNativeFeedback, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -13,18 +14,21 @@ interface Props {
   ticket: TicketDTO;
   onBottomSheetVisible?: (value: boolean) => void;
   onSelectedTicket?: (ticket: TicketDTO) => void;
+  onLongPress: () => void;
 }
 
 export function Ticket({
   onBottomSheetVisible,
   onSelectedTicket,
   ticket,
+  onLongPress,
 }: Props) {
   const colorScheme = useColorScheme();
 
   return (
     <TouchableNativeFeedback
-      onLongPress={() => {
+      onLongPress={onLongPress}
+      onPress={() => {
         onBottomSheetVisible && onBottomSheetVisible(true);
         onSelectedTicket && onSelectedTicket(ticket);
       }}
@@ -47,7 +51,7 @@ export function Ticket({
             fontFamily="Inter-Regular"
             style={styles.date}
           >
-            {`Vence em `}
+            {isBefore(ticket.due, new Date()) ? `Venceu em ` : `Vence em `}
             <StyledText
               color={colors[colorScheme].texts.body}
               fontFamily="Inter-SemiBold"

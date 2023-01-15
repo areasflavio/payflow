@@ -12,44 +12,48 @@ interface Props extends InputProps {
   name: string;
 }
 
-export function Input({ control, name, errorMessage, ...rest }: Props) {
-  const colorScheme = useColorScheme();
+export const Input = React.forwardRef(
+  ({ control, name, errorMessage, ...rest }: Props, ref) => {
+    const colorScheme = useColorScheme();
 
-  return (
-    <Controller
-      control={control}
-      render={({ field: { onChange, onBlur, value } }) => (
-        <RNEInput
-          onBlur={onBlur}
-          onChangeText={(value) => onChange(value)}
-          value={value}
-          placeholderTextColor={colors[colorScheme].texts.inputs}
-          cursorColor={colors[colorScheme].brand.primary}
-          style={[
-            styles.input,
-            {
-              color: colors[colorScheme].texts.body,
-              borderColor: colors[colorScheme].shapes.stroke,
-            },
-          ]}
-          leftIconContainerStyle={[
-            styles.icon,
-            {
-              borderColor: colors[colorScheme].shapes.stroke,
-            },
-          ]}
-          errorStyle={{ color: colors[colorScheme].actions.delete }}
-          errorMessage={errorMessage}
-          autoCapitalize="none"
-          autoComplete="off"
-          autoCorrect={false}
-          {...rest}
-        />
-      )}
-      name={name}
-    />
-  );
-}
+    return (
+      <Controller
+        control={control}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <RNEInput
+            ref={ref}
+            onBlur={onBlur}
+            onChangeText={(value) => onChange(value)}
+            value={value}
+            placeholderTextColor={colors[colorScheme].texts.inputs}
+            cursorColor={colors[colorScheme].brand.primary}
+            style={[
+              styles.input,
+              {
+                color: colors[colorScheme].texts.body,
+                borderColor: colors[colorScheme].shapes.stroke,
+              },
+            ]}
+            leftIconContainerStyle={[
+              styles.icon,
+              {
+                borderColor: colors[colorScheme].shapes.stroke,
+              },
+            ]}
+            errorStyle={{ color: colors[colorScheme].actions.delete }}
+            errorMessage={errorMessage}
+            autoCapitalize="none"
+            autoComplete="off"
+            autoCorrect={false}
+            {...rest}
+          />
+        )}
+        name={name}
+      />
+    );
+  }
+);
+
 const styles = StyleSheet.create({
   input: {
     fontFamily: 'Inter-Regular',

@@ -8,7 +8,7 @@ import {
   Wallet,
   XCircle,
 } from 'phosphor-react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import {
   Keyboard,
@@ -17,6 +17,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from 'react-native';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { RFValue } from 'react-native-responsive-fontsize';
 import * as yup from 'yup';
 
@@ -24,6 +25,7 @@ import { StyledText } from '../../components/StyledText';
 import { View as ThemedView } from '../../components/Themed';
 import { colors } from '../../constants/Colors';
 import useColorScheme from '../../hooks/useColorScheme';
+import { dateDayMonthYear } from '../../utils/format';
 import { Button } from './components/Button';
 import { Input } from './components/Input';
 
@@ -42,10 +44,7 @@ const schema = yup
       .number()
       .positive('O valor do boleto deve ser um valor positivo')
       .required('O valor do boleto é obrigatório'),
-    code: yup
-      .number()
-      .positive('O código do boleto deve ser um valor positivo')
-      .required('O código do boleto é obrigatório'),
+    code: yup.string().required('O código do boleto é obrigatório'),
   })
   .required();
 
@@ -57,11 +56,15 @@ type FormData = {
 };
 
 export function NewTicket() {
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [dueDate, setDueDate] = useState<Date>();
+
   const colorScheme = useColorScheme();
   const { goBack } = useNavigation();
 
   const {
     register,
+    setValue,
     handleSubmit,
     control,
     reset,
@@ -72,8 +75,27 @@ export function NewTicket() {
   });
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
-    console.log(data);
+    const formData = {
+      ...data,
+      due: dueDate,
+    };
+    console.log(formData);
     Keyboard.dismiss();
+  };
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+    Keyboard.dismiss();
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date: Date) => {
+    setValue('due', dateDayMonthYear(date));
+    setDueDate(date);
+    hideDatePicker();
   };
 
   return (
@@ -122,6 +144,7 @@ export function NewTicket() {
                 <XCircle size={24} color={colors[colorScheme].brand.primary} />
               }
               errorMessage={errors.due?.message}
+              onFocus={showDatePicker}
             />
             <Input
               control={control}
@@ -159,6 +182,16 @@ export function NewTicket() {
             onPress={handleSubmit(onSubmit)}
           />
         </ThemedView>
+
+        <DateTimePickerModal
+          accentColor={colors[colorScheme].brand.primary}
+          isDarkModeEnabled={colorScheme === 'dark'}
+          themeVariant={colorScheme}
+          isVisible={isDatePickerVisible}
+          mode="date"
+          onConfirm={handleConfirm}
+          onCancel={hideDatePicker}
+        />
       </ThemedView>
     </TouchableWithoutFeedback>
   );
